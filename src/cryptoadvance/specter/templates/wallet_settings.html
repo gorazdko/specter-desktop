@@ -44,8 +44,14 @@
 <div class="note center">
 	Import this wallet to the device by scanning QR code below.
 </div>
-<div class="center">
-	<img src="{{qrcode(qr_text)}}" class="qr padded" width="400px" />
+
+<div class="center row">
+<script>
+var qrAnim = {{qr_animate(qr_text) | safe }}
+const qrA = new QRAnim(qrAnim, 400, "qrA")
+window.setInterval(function(){qrA.qra_next()}, 200)
+</script>
+
 </div>
 {% if wallet.is_multisig %}
 <div>

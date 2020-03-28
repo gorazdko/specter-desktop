@@ -20,6 +20,7 @@ from .rpc import BitcoinCLI, RPC_PORTS
 
 from .logic import Specter, purposes, addrtypes, get_cli
 from datetime import datetime
+from math import ceil
 import urllib
 
 from pathlib import Path
@@ -565,9 +566,20 @@ def device(device_alias):
     return render_template("device.html", device_alias=device_alias, device=device, purposes=purposes, specter=app.specter, rand=rand)
 
 
+############### context_processor ######
+@app.context_processor
+def qranim():
+    def qr_animate(qrtext, max_len=100):
+        if len(qrtext)/max_len > 1.0:
+            number_of_chunks = ceil(len(qrtext) / max_len)
+            n = ceil(len(qrtext) / number_of_chunks)
+            qrA_payload = [qrtext[i:i+n] for i in range(0, len(qrtext), n)]
+            qrA_list = ["p{}of{} ".format(k+1, len(qrA_payload)) + s for k, s in enumerate(qrA_payload)]
+            return qrA_list
+        return [qrtext]
+    return {'qr_animate': qr_animate}
 
 ############### filters ##################
-
 @app.template_filter('datetime')
 def timedatetime(s):
     return format(datetime.fromtimestamp(s), "%d.%m.%Y %H:%M")
@@ -588,6 +600,3 @@ def derivation(wallet):
 @app.template_filter('prettyjson')
 def txonaddr(obj):
     return json.dumps(obj, indent=4)
-
-
-    

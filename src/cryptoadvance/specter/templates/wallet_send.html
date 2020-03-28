@@ -103,24 +103,30 @@
 		{% if wallet.uses_qrcode_device %}
 			<div class="row padded">
 				<label>
-					<input type="radio" name="psbt_type" value="compressed_psbt" class="hidden" checked>
+					<input autocomplete="off" type="radio" name="psbt_type" value="compressed_psbt" class="hidden" checked>
 					<div class="btn radio left">Compressed PSBT</div>
 				</label>
 				<label>
-					<input type="radio" name="psbt_type" value="full_psbt" class="hidden">
+					<input autocomplete="off" type="radio" name="psbt_type" value="full_psbt" class="hidden">
 					<div class="btn radio right">Full PSBT</div>
 				</label>
 			</div>
 
 			<div class="row" style="min-height: 400px;">
-			<!--    {% set chunk = 700 %}
-				{%for i in range( (psbt["base64"] | length)//chunk+1)%}
-				<img src="{{qrcode((loop.index0 | string)+''+psbt['base64'][loop.index0*chunk:(loop.index0+1)*chunk])}}" class="qr" width="300px"/>
-				{%endfor%}
-			 -->
+				<div class="center">
+				<script>
+				let qrAnim = {{ qr_animate(psbt["base64"]) | safe }}
+				const full_psbt = new QRAnim(qrAnim, 400, "full_psbt");
+				full_psbt.hide()
+				</script>
+				</div>
 
-				<img id="compressed_psbt" src="{{qrcode(psbt['specter'])}}" class="qr broad" width="400px" height="400px"/>
-				<img id="full_psbt" src="{{qrcode(psbt['base64'])}}" class="qr broad" width="400px" height="400px" style="display: none"/>
+				<div class="center">
+				<script>
+				let qrAnim2 = {{ qr_animate(psbt['specter']) | safe }}
+				const compressed_psbt = new QRAnim(qrAnim2, 400, "compressed_psbt");
+				</script>
+				</div>
 			 </div>
 			 <script>
 			 	document.addEventListener("DOMContentLoaded", function(){
