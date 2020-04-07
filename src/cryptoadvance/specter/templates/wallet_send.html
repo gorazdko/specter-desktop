@@ -118,6 +118,7 @@
 				let qrAnim = {{ qr_animate(psbt["base64"]) | safe }}
 				const full_psbt = new QRAnim(qrAnim, 400, "full_psbt");
 				full_psbt.hide()
+				window.setInterval(function(){full_psbt.qra_next()}, 250)
 				</script>
 				</div>
 
@@ -125,6 +126,7 @@
 				<script>
 				let qrAnim2 = {{ qr_animate(psbt['specter']) | safe }}
 				const compressed_psbt = new QRAnim(qrAnim2, 400, "compressed_psbt");
+				window.setInterval(function(){compressed_psbt.qra_next()}, 250)
 				</script>
 				</div>
 			 </div>
